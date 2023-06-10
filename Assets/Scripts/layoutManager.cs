@@ -1,159 +1,105 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class layoutManager : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
-    public GameObject weapon;
-    public bool melee;
-    public GameObject trail;
+    public Tilemap globalwalls;
+    public TileBase wallTile;
+    public Transform playerTrans;
+    public GameObject[] layoutPrefabs;
+    public List<Vector2Int> layouts;
+    public Dictionary<Vector2Int, bool[]> layoutToWalls;
+    public bool[] startingWalls;
 
-    public float weakness;
-    public float speed;
-    public float rotateSpeed;
-    public float dashSpeed;
-    public float dashCooldown;
-    public float recoilSpeed;
-    public float recoilAngle;
-    public float agingSpeed;
-    public float maxHp;
-    public float hp;
-    public bool age;
 
-    GameObject slashObject;
-    Quaternion rotation;
-    Vector3 velocity;
-    Vector3 input;
-    float dashTimer;
-    float recoilAnim;
-    float recoilEase;
-    float slashEase;
-    float swapWeaponAnim;
-    public GameObject newWeapon;
-    bool isMelee;
-
-    public void SwapWeapon(GameObject newWeapon, bool isMelee)
-    {
-        swapWeaponAnim = 1;
-        this.newWeapon = newWeapon;
-        this.isMelee = isMelee;
-        
+    public void Start() {
+        layouts.Clear();
+        layoutToWalls = new Dictionary<Vector2Int, bool[]>(){};
+        generateLayout(0,0);
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (melee)
-        {
-            slashObject = Instantiate(trail, weapon.transform);
+    public void Update() {
+        Vector2Int pos = new Vector2Int(Mathf.FloorToInt(playerTrans.position.x / 5), Mathf.FloorToInt(playerTrans.position.y / 4));
+        //Debug.Log(playerTrans.position.x + " - " +  playerTrans.position.y);
+       // Debug.Log(pos.x + ", " + pos.y);
+        if (layouts.Contains(pos)) {
+            if (layoutToWalls[pos][0] && !layouts.Contains(new Vector2Int(pos.x, pos.y - 1))) {
+                generateLayout(pos.x, pos.y - 1);
+            }
+            if (layoutToWalls[pos][1] && !layouts.Contains(new Vector2Int(pos.x + 1, pos.y))) {
+                generateLayout(pos.x + 1, pos.y);
+            }
+            if (layoutToWalls[pos][2] && !layouts.Contains(new Vector2Int(pos.x, pos.y + 1))) {
+                generateLayout(pos.x, pos.y + 1);
+            }
+            if (layoutToWalls[pos][3] && !layouts.Contains(new Vector2Int(pos.x - 1, pos.y))) {
+                generateLayout(pos.x - 1, pos.y);
+            }
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (age)
-        {
-            weakness += Time.deltaTime * agingSpeed * 0.01f;
-            maxHp = 100 * (0.5f / (weakness + 1) + 0.5f);
+    public void generateLayout(int x, int y) {
+        layouts.Add(new Vector2Int(x, y));
+        bool[] boolWalls = new bool[]{false, false, false, false};
+        bool[] boolWallEnters = new bool[]{false, false, false, false};
+        List<int> optionsWalls = new List<int>(){0,1,2,3};
+        if (layouts.Contains(new Vector2Int(x, y - 1))) {
+            optionsWalls.Remove(0);
+            boolWallEnters[0] = true;
         }
-
-        //Temporary swap weapon button, also works for reloading guns?
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            SwapWeapon(weapon, melee);
+        if (layouts.Contains(new Vector2Int(x + 1, y))) {
+            optionsWalls.Remove(1);
+            boolWallEnters[1] = true;
         }
-        Move();
-        Attack();
+        if (layouts.Contains(new Vector2Int(x, y + 1))) {
+            optionsWalls.Remove(2);
+            boolWallEnters[2] = true;
+        }
+        if (layouts.Contains(new Vector2Int(x - 1, y))) {
+            optionsWalls.Remove(3);
+            boolWallEnters[3] = true;
+        }
+        Debug.Log(string.Join(", ", optionsWalls));
+        if (optionsWalls.Count > 0) {
+            int amtOfWalls = Mathf.Clamp(Random.Range(0,3), 1, 2);
+            for (int i = 0; i < amtOfWalls; i++) {
+                if (optionsWalls.Count == 0) break;
+                int randomIndGetOptionWalls = Random.Range(0, optionsWalls.Count);
+                Debug.Log(optionsWalls[randomIndGetOptionWalls]);
+                boolWalls[optionsWalls[randomIndGetOptionWalls]] = true;
+                optionsWalls.Remove(randomIndGetOptionWalls);
+            }
+        }
+        layoutToWalls.Add(new Vector2Int(x, y), boolWalls);
+        Debug.Log(boolWallEnters[0] + " , " + boolWallEnters[1] + ", " + boolWallEnters[2] + ", " + boolWallEnters[3]);
+        placeWalls(x * 10,y * 8, boolWalls, boolWallEnters);
+        GameObject layoutInstant = Instantiate(layoutPrefabs[Random.Range(0, layoutPrefabs.Length - 1)], new Vector3(x * 5, y * 4, 0), Quaternion.identity, transform);
     }
-    private void FixedUpdate()
-    {
-        velocity *= 0.1f / (weakness + 1) + 0.88f;
-        if (melee && swapWeaponAnim == 0)
-        {
-            slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
-            slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
+    public void placeWalls(int x, int y, bool[] walls, bool[] wallenters) {
+        for (int ix = 0; ix < 9; ix++) {
+            if(!wallenters[0] || ix == 9 || ix == 0) globalwalls.SetTile(new Vector3Int(x + ix, y), wallTile);
+            if(!wallenters[2] || ix == 9 || ix == 0) globalwalls.SetTile(new Vector3Int(x + ix, y + 7), wallTile);
         }
-        else
-        {
-            slashEase = 0;
+        for (int iy = 0; iy < 8; iy++) {
+            if(!wallenters[3] || iy == 7 || iy == 0) globalwalls.SetTile(new Vector3Int(x, y + iy), wallTile);
+            if(!wallenters[1] || iy == 7 || iy == 0) globalwalls.SetTile(new Vector3Int(x + 9, y + iy), wallTile);
+        }
+        if (walls[0]) {
+            globalwalls.SetTile(new Vector3Int(x + 4, y), null);
+            globalwalls.SetTile(new Vector3Int(x + 5, y), null);
+        }
+        if (walls[1]) {
+            globalwalls.SetTile(new Vector3Int(x + 9, y+3), null);
+            globalwalls.SetTile(new Vector3Int(x + 9, y+4), null);
+        }
+        if (walls[2]) {
+            globalwalls.SetTile(new Vector3Int(x + 4, y+7), null);
+            globalwalls.SetTile(new Vector3Int(x + 5, y+7), null);
+        }
+        if (walls[3]) {
+            globalwalls.SetTile(new Vector3Int(x, y+3), null);
+            globalwalls.SetTile(new Vector3Int(x, y+4), null);
         }
     }
-    private void Attack()
-    {
-        if (!melee & Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            recoilEase = 1;
-            recoilAnim = recoilAngle;
-        }
-    }
-    private void Move()
-    {
-        //Get angle of mouse pointer with lerp
-        Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360;
-        rotation = Quaternion.Slerp(rotation, Quaternion.AngleAxis(angle, Vector3.forward), rotateSpeed * Time.deltaTime);
 
-        //Flip the player to face the mouse pointer
-        if(angle > -90 && angle < 90)
-        {
-            spriteRenderer.flipX = false;
-
-            //Rotate the held weapon to face the mouse pointer
-            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle - recoilAnim), Quaternion.Euler(0, 0, angle + recoilAnim), recoilEase), recoilEase);
-            if(swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = false;
-        }
-        else
-        {
-            spriteRenderer.flipX = true;
-
-            //Rotate the held weapon to face the mouse pointer
-            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle + recoilAnim), Quaternion.Euler(0, 0, angle - recoilAnim), recoilEase), recoilEase);
-            if (swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = true;
-        }
-        swapWeaponAnim -= Time.deltaTime * 5;
-        if (swapWeaponAnim < 0)
-            swapWeaponAnim = 0;
-        else if (swapWeaponAnim < 0.5f)
-        {
-            weapon = newWeapon;
-            melee = isMelee;
-        }
-
-        weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2);
-        recoilEase -= recoilSpeed * Time.deltaTime;
-
-        if (recoilEase < 0)
-        {
-            Destroy(slashObject);
-        }
-
-        //Movement
-        transform.position += velocity * Time.deltaTime;
-        input = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-        {
-            input.y = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            input.y = -1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            input.x = 1;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            input.x = -1;
-        }
-        if (dashTimer > dashCooldown && Input.GetKeyDown(KeyCode.Space))
-        {
-            dashTimer = 0;
-            velocity = input.normalized * dashSpeed;
-        }
-        velocity += input.normalized * speed * Time.deltaTime;
-        dashTimer += Time.deltaTime;
-    }
 }
