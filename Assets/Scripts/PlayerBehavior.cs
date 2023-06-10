@@ -30,7 +30,7 @@ public class PlayerBehavior : MonoBehaviour
     float recoilEase;
     float slashEase;
     float swapWeaponAnim;
-    GameObject newWeapon;
+    public GameObject newWeapon;
     bool isMelee;
 
     public void SwapWeapon(GameObject newWeapon, bool isMelee)
