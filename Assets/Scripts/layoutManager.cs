@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class layoutManager : MonoBehaviour
 {
+    public NavMeshPlus.Components.NavMeshSurface navSurface;
     public Tilemap globalwalls;
     public TileBase wallTile;
     public Transform playerTrans;
@@ -12,6 +13,7 @@ public class layoutManager : MonoBehaviour
     public List<Vector2Int> layouts;
     public Dictionary<Vector2Int, bool[]> layoutToWalls;
     public bool[] startingWalls;
+    public mobManager mm;
 
 
     public void Start() {
@@ -74,6 +76,16 @@ public class layoutManager : MonoBehaviour
         Debug.Log(boolWallEnters[0] + " , " + boolWallEnters[1] + ", " + boolWallEnters[2] + ", " + boolWallEnters[3]);
         placeWalls(x * 10,y * 8, boolWalls, boolWallEnters);
         GameObject layoutInstant = Instantiate(layoutPrefabs[Random.Range(0, layoutPrefabs.Length - 1)], new Vector3(x * 5, y * 4, 0), Quaternion.identity, transform);
+        navSurface.BuildNavMesh();
+        Transform layoutObjects = layoutInstant.transform.GetChild(2);
+        for (int ic = 0; ic < layoutObjects.childCount; ic++) {
+            Transform layoutObject = layoutObjects.GetChild(ic);
+            mobSpawner mb = layoutObject.GetComponent<mobSpawner>();
+            if (mb != null) {
+                mb.mm = mm;
+                mb.activate();
+            }
+        }
     }
     public void placeWalls(int x, int y, bool[] walls, bool[] wallenters) {
         for (int ix = 0; ix < 9; ix++) {

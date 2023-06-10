@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7067463816104333017}
   - component: {fileID: 4621023175280332697}
   - component: {fileID: 3096319362730998963}
+  - component: {fileID: 6960399309455581344}
   m_Layer: 0
   m_Name: Tiles
   m_TagString: Untagged
@@ -457,6 +458,22 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &6960399309455581344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510460532515483184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1301242446801281115
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,6 +485,7 @@ GameObject:
   - component: {fileID: 408812732217286927}
   - component: {fileID: 6027008411931983225}
   - component: {fileID: 20206131295993869}
+  - component: {fileID: 1625972265138677357}
   m_Layer: 0
   m_Name: BackgroundTiles
   m_TagString: Untagged
@@ -1409,6 +1427,22 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!114 &1625972265138677357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301242446801281115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &2070850057023302322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,3 +1616,4 @@ MonoBehaviour:
   range: 999
   activatedSprite: {fileID: 1374003784, guid: 0493aebb1c099dc4e8cfb2afd77fb768, type: 3}
   sr: {fileID: 1871987255241576887}
+  mm: {fileID: 0}

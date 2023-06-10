@@ -12,7 +12,12 @@ public class mobSpawner : MonoBehaviour
     public float range = 999f;
     public Sprite activatedSprite;
     public SpriteRenderer sr;
-    
+    public mobManager mm;
+
+    public void activate() {
+        sr.sprite = activatedSprite;
+        
+    }
 
 
 }
