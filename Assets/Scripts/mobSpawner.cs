@@ -30,7 +30,7 @@ public class mobSpawner : MonoBehaviour
             for (int i = 0; i < mobAmt; i++) {
                 Vector2 spawnMobs = transform.position;
                 spawnMobs += new Vector2(Random.Range(-0.5f*spread.x, 0.5f*spread.x), Random.Range(-0.5f*spread.y, 0.5f*spread.y));
-                mm.spawnMob(mobTypes[Random.Range(0, mobTypes.Length - 1)], spawnMobs.x, spawnMobs.y);
+                mm.spawnJews(mobTypes[Random.Range(0, mobTypes.Length - 1)], spawnMobs.x, spawnMobs.y);
             }
         }
 
