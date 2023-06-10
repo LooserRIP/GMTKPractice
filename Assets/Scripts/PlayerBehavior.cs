@@ -77,6 +77,7 @@ public class PlayerBehavior : MonoBehaviour
         {
             slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
             slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
+            weapon.GetComponent<WeaponBehavior>().dIndex = slashEase * (1 / (weakness + 1) + 0.25f) * 10;
         }
         else
         {
