@@ -189,3 +189,4 @@ MonoBehaviour:
   maxHealth: 5
   health: 5
   player: {fileID: 0}
+  bullet: {fileID: 3607148214478823062, guid: 8dfc135eb502dcb41b0cd3ef06f14edf, type: 3}

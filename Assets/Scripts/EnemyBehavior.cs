@@ -10,8 +10,10 @@ public class EnemyBehavior : MonoBehaviour
     public float maxHealth;
     public float health;
     public GameObject player;
+    public GameObject bullet;
 
     float iFrames;
+    float attackCooldown;
 
     public enum EnemyType
     {
@@ -52,7 +54,18 @@ public class EnemyBehavior : MonoBehaviour
                     GetComponent<NavMeshAgent>().SetDestination(transform.position);
             }
         }
+        if(enemyType == EnemyType.Pillar)
+        {
+            if ((player.transform.position - transform.position).magnitude < trackingRange && attackCooldown < 0)
+            {
+                attackCooldown = 2;
+                GameObject nBullet = Instantiate(bullet, transform.position, Quaternion.identity, transform);
+                nBullet.GetComponent<BulletBehavior>().velocity = (player.transform.position - transform.position).normalized * 3;
+            }
+        }
+
         transform.rotation = Quaternion.identity;
+        attackCooldown -= Time.deltaTime;
         iFrames -= Time.deltaTime;
         if (health <= 0)
         {
