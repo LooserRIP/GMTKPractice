@@ -6,30 +6,47 @@ public class PlayerBehavior : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public GameObject weapon;
+    public bool melee;
+    public GameObject trail;
 
     public float weakness;
     public float speed;
     public float rotateSpeed;
     public float dashSpeed;
     public float dashCooldown;
-    public float slashSpeed;
-    public float slashAngle;
+    public float recoilSpeed;
+    public float recoilAngle;
     public float agingSpeed;
     public float maxHp;
     public float hp;
     public bool age;
 
+    GameObject slashObject;
     Quaternion rotation;
     Vector3 velocity;
     Vector3 input;
     float dashTimer;
-    float slash;
-    float slashAmount;
+    float recoilAnim;
+    float recoilEase;
+    float slashEase;
+    float swapWeaponAnim;
+    GameObject newWeapon;
+    bool isMelee;
+
+    public void SwapWeapon(GameObject newWeapon, bool isMelee)
+    {
+        swapWeaponAnim = 1;
+        this.newWeapon = newWeapon;
+        this.isMelee = isMelee;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        if (melee)
+        {
+            slashObject = Instantiate(trail, weapon.transform);
+        }
     }
 
     // Update is called once per frame
@@ -40,26 +57,41 @@ public class PlayerBehavior : MonoBehaviour
             weakness += Time.deltaTime * agingSpeed * 0.01f;
             maxHp = 100 * (0.5f / (weakness + 1) + 0.5f);
         }
+
+        //Temporary swap weapon button, also works for reloading guns?
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SwapWeapon(weapon, melee);
+        }
         Move();
         Attack();
     }
     private void FixedUpdate()
     {
         velocity *= 0.1f / (weakness + 1) + 0.88f;
+        if (melee && swapWeaponAnim == 0)
+        {
+            slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
+            slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
+        }
+        else
+        {
+            slashEase = 0;
+        }
     }
     private void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (!melee & Input.GetKeyDown(KeyCode.Mouse0))
         {
-            slashAmount = 1;
-            slash = slashAngle;
+            recoilEase = 1;
+            recoilAnim = recoilAngle;
         }
     }
     private void Move()
     {
         //Get angle of mouse pointer with lerp
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360;
         rotation = Quaternion.Slerp(rotation, Quaternion.AngleAxis(angle, Vector3.forward), rotateSpeed * Time.deltaTime);
 
         //Flip the player to face the mouse pointer
@@ -68,18 +100,32 @@ public class PlayerBehavior : MonoBehaviour
             spriteRenderer.flipX = false;
 
             //Rotate the held weapon to face the mouse pointer
-            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle - slash), Quaternion.Euler(0, 0, angle + slash), slashAmount), slashAmount);
-            weapon.transform.position = transform.position + dir.normalized * 0.5f;
-            slashAmount -= slashSpeed * Time.deltaTime;
+            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle - recoilAnim), Quaternion.Euler(0, 0, angle + recoilAnim), recoilEase), recoilEase);
+            if(swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = false;
         }
         else
         {
             spriteRenderer.flipX = true;
 
             //Rotate the held weapon to face the mouse pointer
-            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle + slash), Quaternion.Euler(0, 0, angle - slash), slashAmount), slashAmount);
-            weapon.transform.position = transform.position + dir.normalized * 0.5f;
-            slashAmount -= slashSpeed * Time.deltaTime;
+            weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle + recoilAnim), Quaternion.Euler(0, 0, angle - recoilAnim), recoilEase), recoilEase);
+            if (swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = true;
+        }
+        swapWeaponAnim -= Time.deltaTime * 5;
+        if (swapWeaponAnim < 0)
+            swapWeaponAnim = 0;
+        else if (swapWeaponAnim < 0.5f)
+        {
+            weapon = newWeapon;
+            melee = isMelee;
+        }
+
+        weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2);
+        recoilEase -= recoilSpeed * Time.deltaTime;
+
+        if (recoilEase < 0)
+        {
+            Destroy(slashObject);
         }
 
         //Movement
