@@ -6,7 +6,6 @@ public class PlayerBehavior : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public GameObject weapon;
-    public bool melee;
     public GameObject trail;
 
     public float weakness;
@@ -48,7 +47,7 @@ public class PlayerBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (melee)
+        if (weapon.GetComponent<WeaponBehavior>().melee)
         {
             slashObject = Instantiate(trail, weapon.transform);
         }
@@ -66,7 +65,7 @@ public class PlayerBehavior : MonoBehaviour
         //Temporary swap weapon button, also works for reloading guns?
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SwapWeapon(weapon, melee);
+            SwapWeapon(weapon, weapon.GetComponent<WeaponBehavior>().melee);
         }
         Move();
         Attack();
@@ -74,7 +73,7 @@ public class PlayerBehavior : MonoBehaviour
     private void FixedUpdate()
     {
         GetComponent<Rigidbody2D>().velocity *= 0.1f / (weakness + 1) + 0.88f;
-        if (melee && swapWeaponAnim == 0)
+        if (weapon.GetComponent<WeaponBehavior>().melee && swapWeaponAnim == 0)
         {
             slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
             slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
@@ -88,7 +87,8 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (melee)
+            weapon.GetComponent<WeaponBehavior>().Attack();
+            if (weapon.GetComponent<WeaponBehavior>().melee)
             {
                 attackEase = 1;
                 if (spriteRenderer.flipX)
@@ -141,7 +141,6 @@ public class PlayerBehavior : MonoBehaviour
         else if (swapWeaponAnim < 0.5f)
         {
             weapon = newWeapon;
-            melee = isMelee;
         }
 
         weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2);
