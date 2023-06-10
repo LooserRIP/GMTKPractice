@@ -7,7 +7,9 @@ public class layoutManager : MonoBehaviour
 {
     public NavMeshPlus.Components.NavMeshSurface navSurface;
     public Tilemap globalwalls;
+    public Tilemap globalceils;
     public TileBase wallTile;
+    public TileBase ceilingTile;
     public Transform playerTrans;
     public GameObject[] layoutPrefabs;
     public List<Vector2Int> layouts;
@@ -90,28 +92,52 @@ public class layoutManager : MonoBehaviour
     }
     public void placeWalls(int x, int y, bool[] walls, bool[] wallenters) {
         for (int ix = 0; ix < 9; ix++) {
-            if(!wallenters[0] || ix == 9 || ix == 0) globalwalls.SetTile(new Vector3Int(x + ix, y), wallTile);
-            if(!wallenters[2] || ix == 9 || ix == 0) globalwalls.SetTile(new Vector3Int(x + ix, y + 7), wallTile);
+            if (!wallenters[0] || ix == 9 || ix == 0)
+            {
+                globalwalls.SetTile(new Vector3Int(x + ix, y), wallTile);
+                globalceils.SetTile(new Vector3Int(x + ix, y + 1), ceilingTile);
+            }
+            if (!wallenters[2] || ix == 9 || ix == 0)
+            {
+                globalwalls.SetTile(new Vector3Int(x + ix, y + 7), wallTile);
+                globalceils.SetTile(new Vector3Int(x + ix, y + 8), ceilingTile);
+            }
         }
         for (int iy = 0; iy < 8; iy++) {
-            if(!wallenters[3] || iy == 7 || iy == 0) globalwalls.SetTile(new Vector3Int(x, y + iy), wallTile);
-            if(!wallenters[1] || iy == 7 || iy == 0) globalwalls.SetTile(new Vector3Int(x + 9, y + iy), wallTile);
+            if (!wallenters[3] || iy == 7 || iy == 0)
+            {
+                globalwalls.SetTile(new Vector3Int(x, y + iy), wallTile);
+                globalceils.SetTile(new Vector3Int(x, y + iy + 1), ceilingTile);
+            }
+            if (!wallenters[1] || iy == 7 || iy == 0)
+            {
+                globalwalls.SetTile(new Vector3Int(x + 9, y + iy), wallTile);
+                globalceils.SetTile(new Vector3Int(x + 9, y + iy + 1), ceilingTile);
+            }
         }
         if (walls[0]) {
             globalwalls.SetTile(new Vector3Int(x + 4, y), null);
             globalwalls.SetTile(new Vector3Int(x + 5, y), null);
+            globalceils.SetTile(new Vector3Int(x + 4, y + 1), null);
+            globalceils.SetTile(new Vector3Int(x + 5, y + 1), null);
         }
         if (walls[1]) {
-            globalwalls.SetTile(new Vector3Int(x + 9, y+3), null);
-            globalwalls.SetTile(new Vector3Int(x + 9, y+4), null);
+            globalwalls.SetTile(new Vector3Int(x + 9, y + 3), null);
+            globalwalls.SetTile(new Vector3Int(x + 9, y + 4), null);
+            globalceils.SetTile(new Vector3Int(x + 9, y + 4), null);
+            globalceils.SetTile(new Vector3Int(x + 9, y + 5), null);
         }
         if (walls[2]) {
-            globalwalls.SetTile(new Vector3Int(x + 4, y+7), null);
-            globalwalls.SetTile(new Vector3Int(x + 5, y+7), null);
+            globalwalls.SetTile(new Vector3Int(x + 4, y + 7), null);
+            globalwalls.SetTile(new Vector3Int(x + 5, y + 7), null);
+            globalceils.SetTile(new Vector3Int(x + 4, y + 8), null);
+            globalceils.SetTile(new Vector3Int(x + 5, y + 8), null);
         }
         if (walls[3]) {
-            globalwalls.SetTile(new Vector3Int(x, y+3), null);
-            globalwalls.SetTile(new Vector3Int(x, y+4), null);
+            globalwalls.SetTile(new Vector3Int(x, y + 3), null);
+            globalwalls.SetTile(new Vector3Int(x, y + 4), null);
+            globalceils.SetTile(new Vector3Int(x, y + 4), null);
+            globalceils.SetTile(new Vector3Int(x, y + 5), null);
         }
     }
 

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 895394352, guid: 0493aebb1c099dc4e8cfb2afd77fb768, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -105,6 +105,7 @@ MonoBehaviour:
   delayMinimum: 0
   delayMaximum: 0
   range: 999
+  waitForSameRoom: 0
   activatedSprite: {fileID: 1374003784, guid: 0493aebb1c099dc4e8cfb2afd77fb768, type: 3}
   sr: {fileID: 1925429924006932463}
   mm: {fileID: 0}
