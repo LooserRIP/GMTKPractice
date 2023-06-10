@@ -240,16 +240,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 418534557}
-  weapon: {fileID: 319619941}
-  melee: 0
+  weapon: {fileID: 870521838}
+  melee: 1
   trail: {fileID: 2243139675355376221, guid: ceccd150e96b489408280751846f53f2, type: 3}
   weakness: 0
   speed: 25
   rotateSpeed: 10
   dashSpeed: 15
   dashCooldown: 3.5
-  recoilSpeed: 10
-  recoilAngle: 45
+  recoilSpeed: 5
+  recoilAngle: 90
+  slashSpeed: 5
+  slashAngle: 360
   agingSpeed: 1
   maxHp: 100
   hp: 100
@@ -356,7 +358,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
 --- !u!50 &418534560
 Rigidbody2D:
   serializedVersion: 4
@@ -383,7 +385,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &870521838
 GameObject:
   m_ObjectHideFlags: 0
