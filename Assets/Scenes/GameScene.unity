@@ -497,7 +497,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725cc8d3101fa37499ce6d5912ca377a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTrans: {fileID: 0}
+  playerTrans: {fileID: 418534558}
+  mobs:
+  - {fileID: 8512502243558691511, guid: cf39021d9d4f4c3428e259f7e8076857, type: 3}
+  - {fileID: 7317825549905770200, guid: f0025a92fc0c3f74788d2100507375ae, type: 3}
+  - {fileID: 1188064818431610884, guid: 02aaa295bd4876e4c889a656ffc54955, type: 3}
 --- !u!4 &422076584
 Transform:
   m_ObjectHideFlags: 0
@@ -831,10 +835,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.00220022
-    y: 0.003539823
-    width: 0.99449944
-    height: 0.99115044
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -851,7 +855,7 @@ Camera:
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 1
+  m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
@@ -1115,6 +1119,7 @@ MonoBehaviour:
   - {fileID: 2070850057023302322, guid: a8a49bfa57935734d825188ef6d614ca, type: 3}
   layouts: []
   startingWalls: 00010101
+  mm: {fileID: 422076583}
 --- !u!1 &1545908265
 GameObject:
   m_ObjectHideFlags: 0

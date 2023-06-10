@@ -83,6 +83,7 @@ public class layoutManager : MonoBehaviour
             mobSpawner mb = layoutObject.GetComponent<mobSpawner>();
             if (mb != null) {
                 mb.mm = mm;
+                mb.playerTrans = playerTrans;
                 mb.activate();
             }
         }

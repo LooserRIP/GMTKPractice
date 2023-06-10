@@ -5,6 +5,12 @@ using UnityEngine;
 public class mobManager : MonoBehaviour
 {
     public Transform playerTrans;
+    public GameObject[] mobs;
 
-    
+    public void spawnMob(int id, float x, float y) {
+        GameObject instantMob = Instantiate(mobs[id], new Vector3(x, y), Quaternion.identity, transform);
+        EnemyBehavior oheverybodywantstobemyenemy = instantMob.GetComponent<EnemyBehavior>();
+        oheverybodywantstobemyenemy.player = playerTrans.gameObject;
+    }
+
 }
