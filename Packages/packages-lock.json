@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.h8man.2d.navmeshplus": {
-      "version": "file:E:/koren/UnityPackages/NavMeshPlus-master",
+      "version": "file:C:/UnityPackages/NavMeshPlus-master/NavMeshPlus-master",
       "depth": 0,
       "source": "local",
       "dependencies": {}
