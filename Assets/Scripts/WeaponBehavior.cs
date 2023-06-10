@@ -6,7 +6,7 @@ using UnityEngine;
 public class WeaponBehavior : MonoBehaviour
 {
     public bool melee;
-    public BoxCollider2D collision;
+    BoxCollider2D collision;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,9 @@ public class WeaponBehavior : MonoBehaviour
 
     public void Attack()
     {
+        if (melee)
+        {
 
+        }
     }
 }

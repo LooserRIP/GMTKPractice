@@ -212,6 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 319619943}
   - component: {fileID: 319619942}
+  - component: {fileID: 319619944}
   m_Layer: 0
   m_Name: Revolver_SU
   m_TagString: Untagged
@@ -286,6 +287,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &319619944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319619941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e2bfdf5ea2b8a449a61b78f43f2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  melee: 0
 --- !u!1 &418534554
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +334,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 418534557}
   weapon: {fileID: 870521838}
-  melee: 1
   trail: {fileID: 2243139675355376221, guid: ceccd150e96b489408280751846f53f2, type: 3}
   weakness: 0
   speed: 10
@@ -508,6 +521,8 @@ GameObject:
   m_Component:
   - component: {fileID: 870521840}
   - component: {fileID: 870521839}
+  - component: {fileID: 870521842}
+  - component: {fileID: 870521841}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -582,6 +597,64 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &870521841
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870521838}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.32768598, y: 0.0040215254}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0.5}
+    oldSize: {x: 0.4736, y: 0.4736}
+    newSize: {x: 11.84, y: 11.84}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.34973782, y: 0.19852912}
+  m_EdgeRadius: 0
+--- !u!114 &870521842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870521838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e2bfdf5ea2b8a449a61b78f43f2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  melee: 1
 --- !u!1 &962281098
 GameObject:
   m_ObjectHideFlags: 0
@@ -2080,6 +2153,7 @@ MonoBehaviour:
   enemyType: 0
   trackingRange: 3
   speed: 1
+  health: 0
   player: {fileID: 418534554}
 --- !u!58 &1633161194
 CircleCollider2D:
