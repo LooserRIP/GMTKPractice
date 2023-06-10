@@ -79,7 +79,7 @@ public class layoutManager : MonoBehaviour
         placeWalls(x * 10,y * 8, boolWalls, boolWallEnters);
         GameObject layoutInstant = Instantiate(layoutPrefabs[Random.Range(0, layoutPrefabs.Length - 1)], new Vector3(x * 5, y * 4, 0), Quaternion.identity, transform);
         navSurface.BuildNavMesh();
-        Transform layoutObjects = layoutInstant.transform.GetChild(2);
+        Transform layoutObjects = layoutInstant.transform.GetChild(3);
         for (int ic = 0; ic < layoutObjects.childCount; ic++) {
             Transform layoutObject = layoutObjects.GetChild(ic);
             mobSpawner mb = layoutObject.GetComponent<mobSpawner>();
