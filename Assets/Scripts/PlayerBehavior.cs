@@ -25,8 +25,7 @@ public class PlayerBehavior : MonoBehaviour
 
     GameObject slashObject;
     Quaternion rotation;
-    Vector3 velocity;
-    Vector3 input;
+    Vector2 input;
     float dashTimer;
     float recoilAnim;
     float recoilEase;
@@ -74,7 +73,7 @@ public class PlayerBehavior : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        velocity *= 0.1f / (weakness + 1) + 0.88f;
+        GetComponent<Rigidbody2D>().velocity *= 0.1f / (weakness + 1) + 0.88f;
         if (melee && swapWeaponAnim == 0)
         {
             slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
@@ -149,7 +148,7 @@ public class PlayerBehavior : MonoBehaviour
         recoilEase -= recoilSpeed * Time.deltaTime;
 
         //Movement
-        input = Vector3.zero;
+        input = Vector2.zero;
         if (Input.GetKey(KeyCode.W))
         {
             input.y = 1;
@@ -169,10 +168,9 @@ public class PlayerBehavior : MonoBehaviour
         if (dashTimer > dashCooldown && Input.GetKeyDown(KeyCode.Space))
         {
             dashTimer = 0;
-            velocity = input.normalized * dashSpeed;
+            GetComponent<Rigidbody2D>().velocity = input.normalized * dashSpeed;
         }
-        velocity += input.normalized * speed * Time.deltaTime;
-        GetComponent<Rigidbody2D>().velocity = velocity;
+        GetComponent<Rigidbody2D>().velocity += input.normalized * speed * Time.deltaTime;
         dashTimer += Time.deltaTime;
     }
 }
