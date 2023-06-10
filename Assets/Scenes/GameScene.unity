@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 319619943}
   - component: {fileID: 319619942}
+  - component: {fileID: 319619944}
   m_Layer: 0
   m_Name: Revolver_SU
   m_TagString: Untagged
@@ -200,13 +201,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319619941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.322, y: 0.042, z: 0}
+  m_LocalPosition: {x: 1.1, y: -0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &319619944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319619941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e2bfdf5ea2b8a449a61b78f43f2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  melee: 0
+  collision: {fileID: 0}
 --- !u!1 &418534554
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +256,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 418534557}
   weapon: {fileID: 319619941}
-  melee: 0
   trail: {fileID: 2243139675355376221, guid: ceccd150e96b489408280751846f53f2, type: 3}
   weakness: 0
   speed: 10
@@ -386,6 +400,50 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!1 &422076582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 422076584}
+  - component: {fileID: 422076583}
+  m_Layer: 0
+  m_Name: MobManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &422076583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422076582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725cc8d3101fa37499ce6d5912ca377a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &422076584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422076582}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &870521838
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,7 +521,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870521838}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.801, y: -0.356, z: 0}
+  m_LocalPosition: {x: 1.42, y: 0.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -525,15 +583,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0011086474
-    y: 0.0059790732
-    width: 0.9977827
-    height: 0.9865471
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.0625
+  orthographic size: 2.1875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -545,7 +603,7 @@ Camera:
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 1
+  m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
@@ -659,9 +717,7 @@ MonoBehaviour:
   wallTile: {fileID: 11400000, guid: c16b26485e6894e4d875cf458d70e951, type: 2}
   playerTrans: {fileID: 418534558}
   layoutPrefabs:
-  - {fileID: 1115666688709292309, guid: 0f7b8c69f3f9161429847a3eb90ad9d1, type: 3}
-  - {fileID: 7478812635698148210, guid: a8a49bfa57935734d825188ef6d614ca, type: 3}
-  - {fileID: 4805029547159038846, guid: 301c50ae88b3c7540acd92656de2f588, type: 3}
+  - {fileID: 2070850057023302322, guid: a8a49bfa57935734d825188ef6d614ca, type: 3}
   layouts: []
   startingWalls: 00010101
 --- !u!1 &1545908265
