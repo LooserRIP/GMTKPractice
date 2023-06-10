@@ -16,6 +16,8 @@ public class PlayerBehavior : MonoBehaviour
     public float dashCooldown;
     public float recoilSpeed;
     public float recoilAngle;
+    public float slashSpeed;
+    public float slashAngle;
     public float agingSpeed;
     public float maxHp;
     public float hp;
@@ -29,9 +31,11 @@ public class PlayerBehavior : MonoBehaviour
     float recoilAnim;
     float recoilEase;
     float slashEase;
+    float attackEase;
     float swapWeaponAnim;
     public GameObject newWeapon;
     bool isMelee;
+    int attackFlip;
 
 
     public void SwapWeapon(GameObject newWeapon, bool isMelee)
@@ -83,18 +87,37 @@ public class PlayerBehavior : MonoBehaviour
     }
     private void Attack()
     {
-        if (!melee & Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            recoilEase = 1;
-            recoilAnim = recoilAngle;
+            if (melee)
+            {
+                attackEase = 1;
+                if (spriteRenderer.flipX)
+                {
+                    attackFlip = -1;
+                }
+                else
+                {
+                    attackFlip = 1;
+                }
+            }
+            else
+            {
+                recoilEase = 1;
+                recoilAnim = recoilAngle;
+            }
         }
     }
     private void Move()
     {
         //Get angle of mouse pointer with lerp
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360 + (1 - 4 * (attackEase - 0.5f) * (attackEase - 0.5f)) * (attackEase - 0.5f) * 2 * slashAngle * attackFlip;
         rotation = Quaternion.Slerp(rotation, Quaternion.AngleAxis(angle, Vector3.forward), rotateSpeed * Time.deltaTime);
+
+        attackEase -= slashSpeed * Time.deltaTime;
+        if (attackEase < 0)
+            attackEase = 0;
 
         //Flip the player to face the mouse pointer
         if(angle > -90 && angle < 90)
@@ -125,13 +148,7 @@ public class PlayerBehavior : MonoBehaviour
         weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2);
         recoilEase -= recoilSpeed * Time.deltaTime;
 
-        if (recoilEase < 0)
-        {
-            Destroy(slashObject);
-        }
-
         //Movement
-        transform.position += velocity * Time.deltaTime;
         input = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
         {
@@ -155,6 +172,7 @@ public class PlayerBehavior : MonoBehaviour
             velocity = input.normalized * dashSpeed;
         }
         velocity += input.normalized * speed * Time.deltaTime;
+        GetComponent<Rigidbody2D>().velocity = velocity;
         dashTimer += Time.deltaTime;
     }
 }
