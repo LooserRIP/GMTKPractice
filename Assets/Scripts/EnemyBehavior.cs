@@ -7,7 +7,6 @@ public class EnemyBehavior : MonoBehaviour
 {
     public EnemyType enemyType;
     public float trackingRange;
-    public float speed;
     public float maxHealth;
     public float health;
     public GameObject player;
@@ -35,8 +34,25 @@ public class EnemyBehavior : MonoBehaviour
                 GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
             else
                 GetComponent<NavMeshAgent>().SetDestination(transform.position);
-            transform.rotation = Quaternion.identity;
         }
+        if(enemyType == EnemyType.Scrambler)
+        {
+            if (player.GetComponent<PlayerBehavior>().weakness < 40)
+            {
+                if ((player.transform.position - transform.position).magnitude < trackingRange)
+                    GetComponent<NavMeshAgent>().SetDestination(transform.position * 2 - player.transform.position);
+                else
+                    GetComponent<NavMeshAgent>().SetDestination(transform.position);
+            }
+            else
+            {
+                if ((player.transform.position - transform.position).magnitude < trackingRange)
+                    GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
+                else
+                    GetComponent<NavMeshAgent>().SetDestination(transform.position);
+            }
+        }
+        transform.rotation = Quaternion.identity;
         iFrames -= Time.deltaTime;
         if (health <= 0)
         {
