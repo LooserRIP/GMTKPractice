@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBehavior : MonoBehaviour
+public class layoutManager : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public GameObject weapon;
@@ -32,7 +32,6 @@ public class PlayerBehavior : MonoBehaviour
     float swapWeaponAnim;
     public GameObject newWeapon;
     bool isMelee;
-
 
     public void SwapWeapon(GameObject newWeapon, bool isMelee)
     {
