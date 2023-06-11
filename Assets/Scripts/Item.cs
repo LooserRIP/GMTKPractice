@@ -12,7 +12,9 @@ public class Item : ScriptableObject
     public float size = 1f;
     public float damage = 0f;
     public float knockback = 0f;
-    
+    public float duration = 30f;
+    public PotionType potionType = PotionType.None;
+    public TrapType trapType = TrapType.None;
 }
 public enum ItemType {
     Sword,
@@ -27,4 +29,17 @@ public enum ItemRarity {
     Rare,
     Epic,
     Awesome
+}
+public enum PotionType
+{
+    None,
+    Clone,
+    Invisibility,
+    Regeneration,
+    Speed,
+    Strength
+}
+public enum TrapType 
+{
+    None
 }
