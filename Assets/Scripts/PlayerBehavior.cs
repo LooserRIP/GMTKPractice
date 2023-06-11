@@ -35,9 +35,18 @@ public class PlayerBehavior : MonoBehaviour
     bool isMelee;
     int attackFlip;
 
+    public int[] inventory;
+    public int selectedSlot;
+    public Sprite fistSprite;
+    public hotbarUIManager hotbarui;
+    public gameManager gm;
 
-    public void SwapWeapon(GameObject newWeapon, bool isMelee)
-    {
+    public void init() {
+        inventory = new int[]{-1,-1,-1,-1,-1};
+        selectedSlot = 0;
+        hotbarui.render();
+    }
+    public void SwapWeapon(GameObject newWeapon, bool isMelee) {
         swapWeaponAnim = 1;
         this.newWeapon = newWeapon;
         this.isMelee = isMelee;
@@ -45,71 +54,95 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        if (weapon.GetComponent<WeaponBehavior>().melee)
-        {
+    void Start() {
+        init();   
+        if (weapon.GetComponent<WeaponBehavior>().melee){
             slashObject = Instantiate(trail, weapon.transform);
         }
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (age)
-        {
+    void Update() {
+        if (age) {
             weakness += Time.deltaTime * agingSpeed * 0.01f;
             maxHp = 100 * (0.5f / (weakness + 1) + 0.5f);
         }
-
+        if (Input.GetKeyDown("1")) {
+            switchHotbarSlot(0);
+        }
+        if (Input.GetKeyDown("2")) {
+            switchHotbarSlot(1);
+        }
+        if (Input.GetKeyDown("3")) {
+            switchHotbarSlot(2);
+        }
+        if (Input.GetKeyDown("4")) {
+            switchHotbarSlot(3);
+        }
+        if (Input.GetKeyDown("5")) {
+            switchHotbarSlot(4);
+        }
         //Temporary swap weapon button, also works for reloading guns?
-        if (Input.GetKeyDown(KeyCode.F))
-        {
+        if (Input.GetKeyDown(KeyCode.F)) {
             SwapWeapon(weapon, weapon.GetComponent<WeaponBehavior>().melee);
         }
         Move();
         Attack();
     }
-    private void FixedUpdate()
-    {
+    public void switchHotbarSlot(int slot) {
+        Debug.Log(slot + " placed");
+        bool changed = false;
+        if (slot != selectedSlot) changed = true;
+        selectedSlot = slot;
+        hotbarui.render();
+        if (inventory[slot] == -1) {
+            if (changed) {
+                weapon.GetComponent<SpriteRenderer>().enabled = true;
+                weapon.GetComponent<SpriteRenderer>().sprite = fistSprite;
+                weapon.GetComponent<PolygonCollider2D>().TryUpdateShapeToAttachedSprite();
+                weapon.GetComponent<SpriteRenderer>().enabled = false;
+                SwapWeapon(weapon, true);
+            }
+        } else {
+            Item pickedWeapon = gm.gameItems[inventory[slot]];
+            if (changed) {
+                weapon.GetComponent<SpriteRenderer>().enabled = true;
+                weapon.GetComponent<SpriteRenderer>().sprite = pickedWeapon.Sprite;
+                weapon.GetComponent<PolygonCollider2D>().TryUpdateShapeToAttachedSprite();
+                SwapWeapon(weapon, pickedWeapon.Type == ItemType.Sword);
+            }
+        }
+    }
+    private void FixedUpdate(){
         GetComponent<Rigidbody2D>().velocity *= 0.1f / (weakness + 1) + 0.88f;
-        if (weapon.GetComponent<WeaponBehavior>().melee && swapWeaponAnim == 0)
-        {
+        if (weapon.GetComponent<WeaponBehavior>().melee && swapWeaponAnim == 0){
             slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 100000 - weapon.transform.rotation.eulerAngles * 100000).magnitude) * 0.9f;
             slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
             weapon.GetComponent<WeaponBehavior>().dIndex = slashEase * (1 / (weakness + 1) + 0.25f) * 10;
         }
-        else
-        {
+        else{
             slashEase = 0;
         }
     }
-    private void Attack()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
+    private void Attack(){
+        if (Input.GetKeyDown(KeyCode.Mouse0)){
             weapon.GetComponent<WeaponBehavior>().Attack();
-            if (weapon.GetComponent<WeaponBehavior>().melee)
-            {
+            if (weapon.GetComponent<WeaponBehavior>().melee){
                 attackEase = 1;
-                if (spriteRenderer.flipX)
-                {
+                if (spriteRenderer.flipX) {
                     attackFlip = -1;
                 }
-                else
-                {
+                else {
                     attackFlip = 1;
                 }
             }
-            else
-            {
+            else {
                 recoilEase = 1;
                 recoilAnim = recoilAngle;
             }
         }
     }
-    private void Move()
-    {
+    private void Move() {
         //Get angle of mouse pointer with lerp
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360 + (1 - 4 * (attackEase - 0.5f) * (attackEase - 0.5f)) * (attackEase - 0.5f) * 2 * slashAngle * attackFlip - 45;
@@ -120,16 +153,14 @@ public class PlayerBehavior : MonoBehaviour
             attackEase = 0;
 
         //Flip the player to face the mouse pointer
-        if(angle > -135 && angle < 45)
-        {
+        if(angle > -135 && angle < 45){
             spriteRenderer.flipX = false;
 
             //Rotate the held weapon to face the mouse pointer
             weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle - recoilAnim), Quaternion.Euler(0, 0, angle + recoilAnim), recoilEase), recoilEase);
             //if(swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = false;
         }
-        else
-        {
+        else{
             spriteRenderer.flipX = true;
 
             //Rotate the held weapon to face the mouse pointer
@@ -139,8 +170,7 @@ public class PlayerBehavior : MonoBehaviour
         swapWeaponAnim -= Time.deltaTime * 5;
         if (swapWeaponAnim < 0)
             swapWeaponAnim = 0;
-        else if (swapWeaponAnim < 0.5f)
-        {
+        else if (swapWeaponAnim < 0.5f){
             weapon = newWeapon;
         }
 
@@ -149,24 +179,19 @@ public class PlayerBehavior : MonoBehaviour
 
         //Movement
         input = Vector2.zero;
-        if (Input.GetKey(KeyCode.W))
-        {
+        if (Input.GetKey(KeyCode.W)){
             input.y = 1;
         }
-        if (Input.GetKey(KeyCode.S))
-        {
+        if (Input.GetKey(KeyCode.S)){
             input.y = -1;
         }
-        if (Input.GetKey(KeyCode.D))
-        {
+        if (Input.GetKey(KeyCode.D)){
             input.x = 1;
         }
-        if (Input.GetKey(KeyCode.A))
-        {
+        if (Input.GetKey(KeyCode.A)){
             input.x = -1;
         }
-        if (dashTimer > dashCooldown && Input.GetKeyDown(KeyCode.Space))
-        {
+        if (dashTimer > dashCooldown && Input.GetKeyDown(KeyCode.Space)) {
             dashTimer = 0;
             GetComponent<Rigidbody2D>().velocity = input.normalized * dashSpeed;
         }
