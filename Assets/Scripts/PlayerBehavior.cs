@@ -7,6 +7,10 @@ public class PlayerBehavior : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public GameObject weapon;
     public GameObject trail;
+    public GameObject leftArm;
+    public GameObject rightArm;
+    public GameObject leftLeg;
+    public GameObject rightLeg;
 
     public float weakness;
     public float speed;
@@ -42,6 +46,7 @@ public class PlayerBehavior : MonoBehaviour
     public gameManager gm;
 
     float slashCooldown;
+    float legAnim;
 
     public void init() {
         inventory = new int[]{-1,-1,-1,-1,-1};
@@ -91,6 +96,7 @@ public class PlayerBehavior : MonoBehaviour
         slashCooldown -= slashSpeed * Time.deltaTime;
         Move();
         Attack();
+        Anim();
     }
     public void switchHotbarSlot(int slot) {
         Debug.Log(slot + " placed");
@@ -146,6 +152,59 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
     }
+    private void Anim()
+    {
+        if (spriteRenderer.flipX)
+        {
+            leftArm.transform.localPosition = new Vector3(-0.17f, 0.05f);
+            leftArm.transform.rotation = Quaternion.identity;
+
+            rightArm.transform.position = weapon.transform.position;
+            Vector3 raPos = new Vector3(0.17f, 0.25f);
+            Vector3 ranPos = weapon.transform.position - transform.position - raPos;
+            float angle = Mathf.Atan2(ranPos.x, ranPos.y) * Mathf.Rad2Deg - 180;
+            rightArm.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
+
+            leftLeg.transform.localPosition = new Vector3(-0.1f, 0);
+            rightLeg.transform.localPosition = new Vector3(0.02f, 0);
+
+            leftLeg.GetComponent<SpriteRenderer>().flipX = true;
+            rightLeg.GetComponent<SpriteRenderer>().flipX = true;
+
+            leftLeg.transform.rotation = Quaternion.AngleAxis(Mathf.Sin(legAnim) * 30, Vector3.forward);
+            rightLeg.transform.rotation = Quaternion.AngleAxis(Mathf.Sin(-legAnim) * 30, Vector3.forward);
+
+            leftArm.GetComponent<SpriteRenderer>().sortingOrder = -1;
+            rightArm.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            leftLeg.GetComponent<SpriteRenderer>().sortingOrder = -2;
+            rightLeg.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        }
+        else
+        {
+            rightArm.transform.localPosition = new Vector3(0.17f, 0.05f);
+            rightArm.transform.rotation = Quaternion.identity;
+
+            leftArm.transform.position = weapon.transform.position;
+            Vector3 laPos = new Vector3(-0.17f, 0.25f);
+            Vector3 lanPos = weapon.transform.position - transform.position - laPos;
+            float angle = Mathf.Atan2(lanPos.x, lanPos.y) * Mathf.Rad2Deg - 180;
+            leftArm.transform.rotation = Quaternion.AngleAxis(-angle, Vector3.forward);
+
+            leftLeg.transform.localPosition = new Vector3(-0.02f, 0);
+            rightLeg.transform.localPosition = new Vector3(0.1f, 0);
+
+            leftLeg.GetComponent<SpriteRenderer>().flipX = false;
+            rightLeg.GetComponent<SpriteRenderer>().flipX = false;
+
+            leftLeg.transform.rotation = Quaternion.AngleAxis(Mathf.Sin(-legAnim) * 30, Vector3.forward);
+            rightLeg.transform.rotation = Quaternion.AngleAxis(Mathf.Sin(legAnim) * 30, Vector3.forward);
+
+            leftArm.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            rightArm.GetComponent<SpriteRenderer>().sortingOrder = -1;
+            leftLeg.GetComponent<SpriteRenderer>().sortingOrder = 2;
+            rightLeg.GetComponent<SpriteRenderer>().sortingOrder = -2;
+        }
+    }
     private void Move() {
         //Get angle of mouse pointer with lerp
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -157,7 +216,7 @@ public class PlayerBehavior : MonoBehaviour
             attackEase = 0;
 
         //Flip the player to face the mouse pointer
-        if(angle > -135 && angle < 45){
+        if(Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg > -90 && Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg < 90){
             spriteRenderer.flipX = false;
 
             //Rotate the held weapon to face the mouse pointer
@@ -178,7 +237,7 @@ public class PlayerBehavior : MonoBehaviour
             weapon = newWeapon;
         }
 
-        weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2);
+        weapon.transform.position = transform.position + dir.normalized * (0.5f + ((swapWeaponAnim - 0.5f) * (swapWeaponAnim - 0.5f) - 0.25f) * 2) * 0.5f + new Vector3(0, 0.1f, 0);
         recoilEase -= recoilSpeed * Time.deltaTime;
 
         //Movement
@@ -200,6 +259,12 @@ public class PlayerBehavior : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = input.normalized * dashSpeed;
         }
         GetComponent<Rigidbody2D>().velocity += input.normalized * speed * Time.deltaTime;
+        legAnim += input.magnitude * speed * Time.deltaTime;
+        legAnim %= 360 * Mathf.Deg2Rad;
+        if(input == Vector2.zero)
+        {
+            legAnim *= 0.9f;
+        }
         dashTimer += Time.deltaTime;
     }
 }
