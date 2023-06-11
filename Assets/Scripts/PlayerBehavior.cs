@@ -49,7 +49,7 @@ public class PlayerBehavior : MonoBehaviour
     float legAnim;
 
     public void init() {
-        inventory = new int[]{3,-1,-1,-1,-1};
+        inventory = new int[]{-1,-1,-1,-1,-1};
         selectedSlot = 0;
         hotbarui.render();
     }
@@ -64,6 +64,12 @@ public class PlayerBehavior : MonoBehaviour
         if (weapon.GetComponent<WeaponBehavior>().melee){
             slashObject = Instantiate(trail, weapon.transform);
         }
+        //empty hand
+        weapon.GetComponent<SpriteRenderer>().enabled = true;
+        weapon.GetComponent<SpriteRenderer>().sprite = fistSprite;
+        weapon.GetComponent<PolygonCollider2D>().TryUpdateShapeToAttachedSprite();
+        weapon.GetComponent<SpriteRenderer>().enabled = false;
+        SwapWeapon(weapon);
     }
 
     // Update is called once per frame
