@@ -6,7 +6,7 @@ public class cameraManager : MonoBehaviour
 {
     public Transform playerTrans;
     public void Update() {
-        Vector2Int pos = new Vector2Int(Mathf.FloorToInt((playerTrans.position.x) / 5), Mathf.FloorToInt((playerTrans.position.y) / 4));
-        transform.position = Vector3.Lerp(transform.position, new Vector3(pos.x * 5 + 2.5f, pos.y * 4 + 2.25f, -10), Time.deltaTime * 4);
+        Vector2Int pos = new Vector2Int(Mathf.FloorToInt((playerTrans.position.x) / 9), Mathf.FloorToInt((playerTrans.position.y) / 7));
+        transform.position = Vector3.Lerp(transform.position, new Vector3(pos.x * 9 + 4.5f, pos.y * 7 + 3.75f, -10), Time.deltaTime * 4);
     }
 }

@@ -21,6 +21,8 @@ public class EnemyBehavior : MonoBehaviour
 
     float iFrames;
     float attackCooldown;
+    public bool countTowardsEnemyCount;
+    [HideInInspector] public layoutManager lm;
 
     float flash;
 
@@ -134,9 +136,10 @@ public class EnemyBehavior : MonoBehaviour
         transform.rotation = Quaternion.identity;
         attackCooldown -= Time.deltaTime;
         iFrames -= Time.deltaTime;
-        if (health <= 0)
-        {
+        if (health <= 0) {
             Destroy(gameObject);
+            //death :D
+            if (countTowardsEnemyCount) lm.enemyDeath();
         }
 
         if(flash < 0)
