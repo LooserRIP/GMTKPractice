@@ -41,6 +41,8 @@ public class PlayerBehavior : MonoBehaviour
     public hotbarUIManager hotbarui;
     public gameManager gm;
 
+    float slashCooldown;
+
     public void init() {
         inventory = new int[]{-1,-1,-1,-1,-1};
         selectedSlot = 0;
@@ -86,6 +88,7 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)) {
             SwapWeapon(weapon, weapon.GetComponent<WeaponBehavior>().melee);
         }
+        slashCooldown -= slashSpeed * Time.deltaTime;
         Move();
         Attack();
     }
@@ -117,7 +120,7 @@ public class PlayerBehavior : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity *= 0.1f / (weakness + 1) + 0.88f;
         if (weapon.GetComponent<WeaponBehavior>().melee && swapWeaponAnim == 0){
             slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 100000 - weapon.transform.rotation.eulerAngles * 100000).magnitude) * 0.9f;
-            slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
+            slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase * slashCooldown * 2);
             weapon.GetComponent<WeaponBehavior>().dIndex = slashEase * (1 / (weakness + 1) + 0.25f) * 10;
         }
         else{
@@ -128,6 +131,7 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0)){
             weapon.GetComponent<WeaponBehavior>().Attack();
             if (weapon.GetComponent<WeaponBehavior>().melee){
+                slashCooldown = 1;
                 attackEase = 1;
                 if (spriteRenderer.flipX) {
                     attackFlip = -1;
