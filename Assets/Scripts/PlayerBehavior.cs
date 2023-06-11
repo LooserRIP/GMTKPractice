@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,6 @@ public class PlayerBehavior : MonoBehaviour
     float attackEase;
     float swapWeaponAnim;
     public GameObject newWeapon;
-    bool isMelee;
     int attackFlip;
 
     public int[] inventory;
@@ -49,15 +49,13 @@ public class PlayerBehavior : MonoBehaviour
     float legAnim;
 
     public void init() {
-        inventory = new int[]{-1,-1,-1,-1,-1};
+        inventory = new int[]{3,-1,-1,-1,-1};
         selectedSlot = 0;
         hotbarui.render();
     }
-    public void SwapWeapon(GameObject newWeapon, bool isMelee) {
+    public void SwapWeapon(GameObject newWeapon) {
         swapWeaponAnim = 1;
         this.newWeapon = newWeapon;
-        this.isMelee = isMelee;
-        
     }
 
     // Start is called before the first frame update
@@ -66,6 +64,7 @@ public class PlayerBehavior : MonoBehaviour
         if (weapon.GetComponent<WeaponBehavior>().melee){
             slashObject = Instantiate(trail, weapon.transform);
         }
+        gm.DropItem(4, transform);
     }
 
     // Update is called once per frame
@@ -91,12 +90,13 @@ public class PlayerBehavior : MonoBehaviour
         }
         //Temporary swap weapon button, also works for reloading guns?
         if (Input.GetKeyDown(KeyCode.F)) {
-            SwapWeapon(weapon, weapon.GetComponent<WeaponBehavior>().melee);
+            SwapWeapon(weapon);
         }
         slashCooldown -= slashSpeed * Time.deltaTime;
         Move();
         Attack();
         Anim();
+        Pickup();
     }
     public void switchHotbarSlot(int slot) {
         Debug.Log(slot + " placed");
@@ -110,7 +110,7 @@ public class PlayerBehavior : MonoBehaviour
                 weapon.GetComponent<SpriteRenderer>().sprite = fistSprite;
                 weapon.GetComponent<PolygonCollider2D>().TryUpdateShapeToAttachedSprite();
                 weapon.GetComponent<SpriteRenderer>().enabled = false;
-                SwapWeapon(weapon, true);
+                SwapWeapon(weapon);
             }
         } else {
             Item pickedWeapon = gm.gameItems[inventory[slot]];
@@ -118,7 +118,7 @@ public class PlayerBehavior : MonoBehaviour
                 weapon.GetComponent<SpriteRenderer>().enabled = true;
                 weapon.GetComponent<SpriteRenderer>().sprite = pickedWeapon.Sprite;
                 weapon.GetComponent<PolygonCollider2D>().TryUpdateShapeToAttachedSprite();
-                SwapWeapon(weapon, pickedWeapon.Type == ItemType.Sword);
+                SwapWeapon(weapon);
             }
         }
     }
@@ -266,5 +266,25 @@ public class PlayerBehavior : MonoBehaviour
             legAnim *= 0.9f;
         }
         dashTimer += Time.deltaTime;
+    }
+    void Pickup()
+    {
+        if (Array.IndexOf(inventory, -1) == -1) return;
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            int i = 0;
+            foreach(GameObject item in gm.droppedItems)
+            {
+                if ((item.transform.position - transform.position).magnitude < 1f)
+                {
+                    inventory[Array.IndexOf(inventory, -1)] = gm.droppedItemsID[i];
+                    gm.droppedItems.Remove(item);
+                    Destroy(item);
+                    hotbarui.render();
+                    return;
+                }
+                i++;
+            }
+        }
     }
 }

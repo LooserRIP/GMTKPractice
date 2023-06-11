@@ -2828,12 +2828,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497acb42294f77408dfd2315eb5e56f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseItem: {fileID: 8388364632761821596, guid: 553377f4feed5d34882a51c9e9864c6e, type: 3}
   gameItems:
   - {fileID: 11400000, guid: 1d35af15c9f84cc47a6bfe244c80be1f, type: 2}
   - {fileID: 11400000, guid: bd78c1fba314c6243a8d1f247edf8f27, type: 2}
   - {fileID: 11400000, guid: 049917244f1eca5448aa653454dbc067, type: 2}
   - {fileID: 11400000, guid: 903986422d779a54f9d24c9aafe421cc, type: 2}
   - {fileID: 11400000, guid: 18ce524b496a8f14b8d8964a09564f99, type: 2}
+  droppedItems: []
+  droppedItemsID: 
 --- !u!4 &1810251056
 Transform:
   m_ObjectHideFlags: 0

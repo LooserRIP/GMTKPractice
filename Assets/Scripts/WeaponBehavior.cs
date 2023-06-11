@@ -17,13 +17,15 @@ public class WeaponBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (melee)
-            collision = GetComponent<Collider2D>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (melee && collision == null)
+            collision = GetComponent<Collider2D>();
+
         attackDur -= Time.deltaTime;
         if (melee && attackDur < 0)
         {
