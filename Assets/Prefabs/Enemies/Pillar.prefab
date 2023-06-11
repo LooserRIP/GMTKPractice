@@ -138,7 +138,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -190,4 +190,6 @@ MonoBehaviour:
   health: 15
   player: {fileID: 0}
   bullet: {fileID: 3607148214478823062, guid: 8dfc135eb502dcb41b0cd3ef06f14edf, type: 3}
+  sprite: {fileID: 21300000, guid: 07a65d3a95e791f448c367d5787eaa39, type: 3}
+  flashSprite: {fileID: 21300000, guid: b281a01e4cef0b641bba7fc7b59bcb69, type: 3}
   constraints: []

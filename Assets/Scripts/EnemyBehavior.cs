@@ -13,11 +13,16 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject player;
     public GameObject bullet;
 
+    public Sprite sprite;
+    public Sprite flashSprite;
+
     public List<GameObject> constraints;
     List<Vector3> cPos;
 
     float iFrames;
     float attackCooldown;
+
+    float flash;
 
     public enum EnemyType
     {
@@ -133,6 +138,17 @@ public class EnemyBehavior : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if(flash < 0)
+        {
+            GetComponent<SpriteRenderer>().sprite = sprite;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = flashSprite;
+        }
+
+        flash -= Time.deltaTime;
     }
 
     private void OnTriggerStay2D(Collider2D col)
@@ -140,7 +156,9 @@ public class EnemyBehavior : MonoBehaviour
         if (col.gameObject.tag.Equals("Weapon") && iFrames < 0)
         {
             health -= col.gameObject.GetComponent<WeaponBehavior>().GetMeleeDamage();
+            transform.position += (transform.position - col.gameObject.transform.position).normalized * col.gameObject.GetComponent<WeaponBehavior>().GetKnockBack() / 25;
             iFrames = 0.2f;
+            flash = 0.2f;
         }
     }
 }

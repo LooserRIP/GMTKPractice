@@ -937,6 +937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   melee: 1
+  damage: 1
+  knockback: 1
   dIndex: 1
 --- !u!60 &870521842
 PolygonCollider2D:
@@ -2116,7 +2118,7 @@ GameObject:
   - component: {fileID: 1545908270}
   m_Layer: 0
   m_Name: GlobalWalls
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

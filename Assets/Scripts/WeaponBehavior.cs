@@ -6,11 +6,13 @@ using UnityEngine;
 public class WeaponBehavior : MonoBehaviour
 {
     public bool melee;
+    public float damage;
+    public float knockback;
     public float dIndex;
 
     Collider2D collision;
     float attackDur;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +25,7 @@ public class WeaponBehavior : MonoBehaviour
     void Update()
     {
         attackDur -= Time.deltaTime;
-        if(melee && attackDur < 0)
+        if (melee && attackDur < 0)
         {
             collision.enabled = false;
         }
@@ -40,6 +42,11 @@ public class WeaponBehavior : MonoBehaviour
 
     public float GetMeleeDamage()
     {
-        return dIndex;
+        return dIndex * damage;
+    }
+
+    public float GetKnockBack()
+    {
+        return dIndex * knockback;
     }
 }
