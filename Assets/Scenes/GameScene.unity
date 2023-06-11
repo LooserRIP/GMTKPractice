@@ -937,8 +937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   melee: 1
-  damage: 1
-  knockback: 1
+  damage: 3
+  knockback: 3
   dIndex: 1
 --- !u!60 &870521842
 PolygonCollider2D:

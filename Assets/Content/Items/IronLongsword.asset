@@ -17,5 +17,5 @@ MonoBehaviour:
   Type: 0
   Rarity: 3
   size: 2
-  damage: 0
-  knockback: 0
+  damage: 3
+  knockback: 3
