@@ -75,7 +75,7 @@ public class PlayerBehavior : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity *= 0.1f / (weakness + 1) + 0.88f;
         if (weapon.GetComponent<WeaponBehavior>().melee && swapWeaponAnim == 0)
         {
-            slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 50000 - weapon.transform.rotation.eulerAngles * 50000).magnitude) * 0.9f;
+            slashEase = Mathf.Max(slashEase, (rotation.eulerAngles * 100000 - weapon.transform.rotation.eulerAngles * 100000).magnitude) * 0.9f;
             slashObject.GetComponent<TrailRenderer>().startColor = new Color(1, 1, 1, slashEase);
             weapon.GetComponent<WeaponBehavior>().dIndex = slashEase * (1 / (weakness + 1) + 0.25f) * 10;
         }
@@ -112,7 +112,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         //Get angle of mouse pointer with lerp
         Vector3 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360 + (1 - 4 * (attackEase - 0.5f) * (attackEase - 0.5f)) * (attackEase - 0.5f) * 2 * slashAngle * attackFlip;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + swapWeaponAnim * 360 + (1 - 4 * (attackEase - 0.5f) * (attackEase - 0.5f)) * (attackEase - 0.5f) * 2 * slashAngle * attackFlip - 45;
         rotation = Quaternion.Slerp(rotation, Quaternion.AngleAxis(angle, Vector3.forward), rotateSpeed * Time.deltaTime);
 
         attackEase -= slashSpeed * Time.deltaTime;
@@ -120,13 +120,13 @@ public class PlayerBehavior : MonoBehaviour
             attackEase = 0;
 
         //Flip the player to face the mouse pointer
-        if(angle > -90 && angle < 90)
+        if(angle > -135 && angle < 45)
         {
             spriteRenderer.flipX = false;
 
             //Rotate the held weapon to face the mouse pointer
             weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle - recoilAnim), Quaternion.Euler(0, 0, angle + recoilAnim), recoilEase), recoilEase);
-            if(swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = false;
+            //if(swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = false;
         }
         else
         {
@@ -134,7 +134,7 @@ public class PlayerBehavior : MonoBehaviour
 
             //Rotate the held weapon to face the mouse pointer
             weapon.transform.rotation = Quaternion.Slerp(rotation, Quaternion.Slerp(Quaternion.Euler(0, 0, angle + recoilAnim), Quaternion.Euler(0, 0, angle - recoilAnim), recoilEase), recoilEase);
-            if (swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = true;
+            //if (swapWeaponAnim == 0) weapon.GetComponent<SpriteRenderer>().flipY = true;
         }
         swapWeaponAnim -= Time.deltaTime * 5;
         if (swapWeaponAnim < 0)

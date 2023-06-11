@@ -8,7 +8,7 @@ public class WeaponBehavior : MonoBehaviour
     public bool melee;
     public float dIndex;
 
-    BoxCollider2D collision;
+    Collider2D collision;
     float attackDur;
     
 
@@ -16,7 +16,7 @@ public class WeaponBehavior : MonoBehaviour
     void Start()
     {
         if (melee)
-            collision = GetComponent<BoxCollider2D>();
+            collision = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame

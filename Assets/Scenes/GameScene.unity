@@ -587,7 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 418534557}
-  weapon: {fileID: 319619941}
+  weapon: {fileID: 870521838}
   trail: {fileID: 2243139675355376221, guid: ceccd150e96b489408280751846f53f2, type: 3}
   weakness: 0
   speed: 10
@@ -596,8 +596,8 @@ MonoBehaviour:
   dashCooldown: 3.5
   recoilSpeed: 10
   recoilAngle: 45
-  slashSpeed: 0
-  slashAngle: 0
+  slashSpeed: 5
+  slashAngle: 360
   agingSpeed: 1
   maxHp: 100
   hp: 100
@@ -765,7 +765,7 @@ MonoBehaviour:
   mobs:
   - {fileID: 8512502243558691511, guid: cf39021d9d4f4c3428e259f7e8076857, type: 3}
   - {fileID: 7317825549905770200, guid: f0025a92fc0c3f74788d2100507375ae, type: 3}
-  - {fileID: 1188064818431610884, guid: 02aaa295bd4876e4c889a656ffc54955, type: 3}
+  - {fileID: 8512502243558691511, guid: e7d4e95ccf6cce34187b09c153a10c1e, type: 3}
 --- !u!4 &422076584
 Transform:
   m_ObjectHideFlags: 0
@@ -913,9 +913,11 @@ GameObject:
   m_Component:
   - component: {fileID: 870521840}
   - component: {fileID: 870521839}
+  - component: {fileID: 870521841}
+  - component: {fileID: 870521842}
   m_Layer: 0
   m_Name: Sword
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -961,7 +963,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e66fa567a5509c94e834acb90d4ce437, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d8bbf52239742f34a8590c20ff6a5490, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -979,14 +981,81 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870521838}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.42, y: 0.87, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &870521841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870521838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e2bfdf5ea2b8a449a61b78f43f2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  melee: 1
+  dIndex: 1
+--- !u!60 &870521842
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870521838}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 11.84, y: 11.84}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1, y: 1}
+      - {x: 0.8218423, y: 1.0055852}
+      - {x: 0.78197426, y: 0.9559902}
+      - {x: 0.25134894, y: 0.43287876}
+      - {x: 0.44241092, y: 0.24017797}
+      - {x: 0.45464125, y: 0.26078635}
+      - {x: 0.47419068, y: 0.2796613}
+      - {x: 1, y: 0.8103818}
+  m_UseDelaunayMesh: 0
 --- !u!1 &899470048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,7 +2001,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.05
+  m_VoxelSize: 0.083333336
   m_BuildHeightMesh: 0
   m_HideEditorLogs: 0
   m_NavMeshData: {fileID: 23800000, guid: e1f58ddb9a267d8499d83163e373ca97, type: 2}

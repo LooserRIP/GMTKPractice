@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class EnemyBehavior : MonoBehaviour
     public float health;
     public GameObject player;
     public GameObject bullet;
+
+    public List<GameObject> constraints;
+    List<Vector3> cPos;
 
     float iFrames;
     float attackCooldown;
@@ -24,6 +28,11 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cPos = new List<Vector3>();
+        foreach(GameObject constraint in constraints)
+        {
+            cPos.Add(constraint.transform.position);
+        }
         health = maxHealth;
     }
 
@@ -36,6 +45,28 @@ public class EnemyBehavior : MonoBehaviour
                 GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
             else
                 GetComponent<NavMeshAgent>().SetDestination(transform.position);
+
+            List<Vector3> offsets = new List<Vector3>()
+            {
+                new Vector3(-0.4f, -0.2f),
+                new Vector3(0.4f, -0.2f),
+                new Vector3(-0.2f, -0.1f),
+                new Vector3(0.2f, -0.1f)
+            };
+            int i = 0;
+            foreach(GameObject constraint in constraints)
+            {
+                if((constraint.transform.position - (transform.position + offsets[i])).magnitude > offsets[i].magnitude)
+                {
+                    constraint.transform.position = transform.position + offsets[i];
+                    cPos[i] = constraint.transform.position;
+                }
+                else
+                {
+                    constraint.transform.position = cPos[i];
+                }
+                i++;
+            }
         }
         if(enemyType == EnemyType.Scrambler)
         {
@@ -53,14 +84,45 @@ public class EnemyBehavior : MonoBehaviour
                 else
                     GetComponent<NavMeshAgent>().SetDestination(transform.position);
             }
+
+            List<Vector3> offsets = new List<Vector3>()
+            {
+                new Vector3(-0.2f, -0.1f),
+                new Vector3(0.2f, -0.1f),
+                new Vector3(-0.1f, 0),
+                new Vector3(0.1f, 0)
+            };
+            int i = 0;
+            foreach (GameObject constraint in constraints)
+            {
+                if ((constraint.transform.position - (transform.position + offsets[i])).magnitude > offsets[i].magnitude)
+                {
+                    constraint.transform.position = transform.position + offsets[i];
+                    cPos[i] = constraint.transform.position;
+                }
+                else
+                {
+                    constraint.transform.position = cPos[i];
+                }
+                i++;
+            }
         }
         if(enemyType == EnemyType.Pillar)
         {
+            if (player.transform.position.x > transform.position.x)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            //transform.GetChild(0).transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2((player.transform.position - transform.position - new Vector3(0, 0.75f)).normalized.y, (player.transform.position - transform.position - new Vector3(0, 0.75f)).normalized.x) * Mathf.Rad2Deg);
             if ((player.transform.position - transform.position).magnitude < trackingRange && attackCooldown < 0)
             {
                 attackCooldown = 2;
-                GameObject nBullet = Instantiate(bullet, transform.position, Quaternion.identity, transform);
-                nBullet.GetComponent<BulletBehavior>().velocity = (player.transform.position - transform.position).normalized * 3;
+                GameObject nBullet = Instantiate(bullet, transform.position + new Vector3(0, 0.75f), Quaternion.identity);
+                nBullet.GetComponent<BulletBehavior>().velocity = (player.transform.position - transform.position - new Vector3(0, 0.75f)).normalized * 3;
             }
         }
 
