@@ -64,7 +64,6 @@ public class PlayerBehavior : MonoBehaviour
         if (weapon.GetComponent<WeaponBehavior>().melee){
             slashObject = Instantiate(trail, weapon.transform);
         }
-        gm.DropItem(4, transform);
     }
 
     // Update is called once per frame
@@ -97,6 +96,8 @@ public class PlayerBehavior : MonoBehaviour
         Attack();
         Anim();
         Pickup();
+
+        if (weapon.GetComponent<WeaponBehavior>().gm == null) weapon.GetComponent<WeaponBehavior>().gm = gm;
     }
     public void switchHotbarSlot(int slot) {
         Debug.Log(slot + " placed");
@@ -279,6 +280,7 @@ public class PlayerBehavior : MonoBehaviour
                 {
                     inventory[Array.IndexOf(inventory, -1)] = gm.droppedItemsID[i];
                     gm.droppedItems.Remove(item);
+                    gm.droppedItemsID.RemoveAt(i);
                     Destroy(item);
                     hotbarui.render();
                     return;

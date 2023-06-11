@@ -86,7 +86,7 @@ public class layoutManager : MonoBehaviour
         }
         layoutToWalls.Add(new Vector2Int(x, y), boolWalls);
        // Debug.Log(boolWallEnters[0] + " , " + boolWallEnters[1] + ", " + boolWallEnters[2] + ", " + boolWallEnters[3]);
-        GameObject layoutprefab = layoutPrefabs[Random.Range(0, layoutPrefabs.Length - 1)];
+        GameObject layoutprefab = layoutPrefabs[Random.Range(0, layoutPrefabs.Length)];
         GameObject layoutInstant = Instantiate(layoutprefab, new Vector3(x * 9, y * 7, 0), Quaternion.identity, transform);
         layoutToGameObject.Add(new Vector2Int(x, y), layoutInstant);
         navSurface.BuildNavMesh();

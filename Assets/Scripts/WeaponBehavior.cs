@@ -13,6 +13,7 @@ public class WeaponBehavior : MonoBehaviour
     Collider2D collision;
     float attackDur;
 
+    public gameManager gm;
 
     // Start is called before the first frame update
     void Start()
@@ -50,5 +51,15 @@ public class WeaponBehavior : MonoBehaviour
     public float GetKnockBack()
     {
         return dIndex * knockback;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.tag);
+        if (collision.gameObject.tag.Equals("Crate"))
+        {
+            gm.DropItem(Random.Range(0, gm.gameItems.Length), collision.transform);
+            Destroy(collision.gameObject);
+        }
     }
 }
